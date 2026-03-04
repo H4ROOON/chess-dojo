@@ -12,6 +12,7 @@ import {
     getCurrentCount,
     isRequirement,
 } from '@/database/requirement';
+import { TimeFormat } from '@/database/user';
 import { LoadingButton } from '@mui/lab';
 import {
     Alert,
@@ -25,7 +26,7 @@ import {
     Stack,
     TextField,
 } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
 import InputSlider from './InputSlider';
@@ -81,6 +82,7 @@ const ProgressUpdater: React.FC<ProgressUpdaterProps> = ({
         requirement.scoreboardDisplay === ScoreboardDisplay.Yearly;
     const isNonDojo = requirement.scoreboardDisplay === ScoreboardDisplay.NonDojo;
     const isMinutes = requirement.scoreboardDisplay === ScoreboardDisplay.Minutes;
+    const useTwelveHourClock = user?.timeFormat !== TimeFormat.TwentyFourHour;
 
     const hoursInt = parseInt(hours) || 0;
     const minutesInt = parseInt(minutes) || 0;
@@ -188,12 +190,17 @@ const ProgressUpdater: React.FC<ProgressUpdaterProps> = ({
                     <Stack spacing={2}>
                         <Grid container width={1} gap={2}>
                             <Grid size={{ xs: 12, sm: 'grow' }}>
-                                <DatePicker
+                                <DateTimePicker
                                     label='Date'
                                     disableFuture
                                     value={date}
                                     onChange={setDate}
-                                    slotProps={{ textField: { fullWidth: true } }}
+                                    slotProps={{
+                                        textField: {
+                                            fullWidth: true,
+                                        },
+                                    }}
+                                    ampm={useTwelveHourClock}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 'grow' }}>
@@ -254,7 +261,7 @@ const ProgressUpdater: React.FC<ProgressUpdaterProps> = ({
                             Task Details
                         </Button>
                         <Button
-                            data-cy='task-updater-show-history-button'
+                            data-testid='task-updater-show-history-button'
                             onClick={() => setView(TaskDialogView.History)}
                             disabled={request.isLoading()}
                         >
@@ -263,7 +270,7 @@ const ProgressUpdater: React.FC<ProgressUpdaterProps> = ({
                     </>
                 )}
                 <LoadingButton
-                    data-cy='task-updater-save-button'
+                    data-testid='task-updater-save-button'
                     loading={request.isLoading()}
                     onClick={onSubmit}
                 >
