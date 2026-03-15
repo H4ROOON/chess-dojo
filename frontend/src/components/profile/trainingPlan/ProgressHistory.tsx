@@ -638,7 +638,7 @@ const ProgressHistory = ({ requirement, onClose, setView }: ProgressHistoryProps
 
             <Stack sx={{ flexGrow: 1, px: 2, pt: 1.5 }}>
                 {!isTimeOnly && (
-                    <Typography color='text.secondary'>
+                    <Typography color='text.secondary' data-testid='total-count-summary'>
                         Total {countLabel} : {totalCount}. Current Cohort: {cohortCount}
                     </Typography>
                 )}
