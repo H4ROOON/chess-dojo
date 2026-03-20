@@ -19,9 +19,10 @@ interface Props {
     engineInfo: EngineInfo;
     isTop?: boolean;
     icon?: ReactElement;
+    enabled: boolean;
 }
 
-export default function LineEvaluation({ engineInfo, line, isTop, icon }: Props) {
+export default function LineEvaluation({ engineInfo, line, isTop, icon, enabled }: Props) {
     const { chess, addEngineMoveRef } = useChess();
     const reconcile = useReconcile();
     const [primaryEvalType] = useLocalStorage<PrimaryEvalType>(
@@ -114,6 +115,10 @@ export default function LineEvaluation({ engineInfo, line, isTop, icon }: Props)
 
     const showSkeleton = line.depth === 0 || line.fen !== chess?.fen();
     const moves = line.pv.map(moveLineUciToMove(line.fen));
+
+    if (!enabled && showSkeleton) {
+        return null;
+    }
 
     const onClick = (index: number, addInfo: boolean = addInfoOnMove) => {
         addEngineMove(index, addInfo);
