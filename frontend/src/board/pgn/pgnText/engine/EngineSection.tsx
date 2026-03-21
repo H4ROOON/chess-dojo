@@ -4,6 +4,7 @@ import {
     CLOUD_EVAL_ENABLED,
     ENGINE_LINE_COUNT,
     ENGINE_NAME,
+    ENGINE_SHOW_EVAL,
     engines,
     LineEval,
     PERSIST_ENGINE_LINES,
@@ -27,6 +28,7 @@ export default function EngineSection() {
     }
 
     const [linesNumber] = useLocalStorage(ENGINE_LINE_COUNT.Key, ENGINE_LINE_COUNT.Default);
+    const [showEval] = useLocalStorage(ENGINE_SHOW_EVAL.Key, ENGINE_SHOW_EVAL.Default);
     const [persistEngineLines] = useLocalStorage<boolean>(
         PERSIST_ENGINE_LINES.Key,
         PERSIST_ENGINE_LINES.Default,
@@ -87,7 +89,8 @@ export default function EngineSection() {
                             sx={{ mr: 1 }}
                         />
                     </Tooltip>
-                    {enabled && !isGameOver && (
+
+                    {enabled && !isGameOver && showEval && (
                         <Stack sx={{ mr: 2 }} alignItems='center'>
                             <Typography variant='h5'>
                                 {showCloudEval

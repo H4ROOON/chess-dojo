@@ -199,7 +199,14 @@ export const HIGHLIGHT_ENGINE_LINES = {
     Default: true,
 } as const;
 
-/** Settings for persisting last evaluated lines after disabling engine. */
+/** Settings for showing/hiding the engine evaluation score. */
+export const ENGINE_SHOW_EVAL = {
+    /** Local storage key for showing/hiding eval. */
+    Key: 'engine-show-eval',
+    /** The default value. */
+    Default: true,
+} as const;
+
 export const PERSIST_ENGINE_LINES = {
     /** Local storage key for persisting engine lines. */
     Key: 'persist-engine-lines',
