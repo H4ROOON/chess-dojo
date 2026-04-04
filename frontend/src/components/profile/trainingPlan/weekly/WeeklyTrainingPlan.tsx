@@ -78,7 +78,7 @@ export function WeeklyTrainingPlan() {
                     </IconButton>
                 </Tooltip>
 
-                <Typography variant='h5' fontWeight='bold' ml={0.5} sx={{ mr: 'auto' }}>
+                <Typography variant='h5' fontWeight='bold' ml={0.5} mr={2}>
                     This Week
                 </Typography>
 
@@ -94,33 +94,28 @@ export function WeeklyTrainingPlan() {
 
             <Collapse in={expanded}>
                 <Stack spacing={2} mb={1}>
-                    <Box sx={{ ml: 5 }}>
-                        <Tooltip
-                            title="Hide tasks you haven't logged time for this week"
-                            placement='right'
-                        >
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={activeOnly}
-                                        onChange={(e) => setActiveOnly(e.target.checked)}
-                                        size='small'
-                                    />
-                                }
-                                label={
-                                    <Typography variant='body2' color='text.secondary'>
-                                        Active Only
-                                    </Typography>
-                                }
-                                sx={{ ml: 1, width: 'fit-content' }}
-                            />
-                        </Tooltip>
-                    </Box>
+                    <Tooltip title='Only show tasks you have updated this week' placement='right'>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={activeOnly}
+                                    onChange={(e) => setActiveOnly(e.target.checked)}
+                                    size='small'
+                                />
+                            }
+                            label={
+                                <Typography variant='body2' color='text.secondary'>
+                                    Active Only
+                                </Typography>
+                            }
+                            sx={{ ml: 1, width: 'fit-content' }}
+                        />
+                    </Tooltip>
 
                     {isLoading ? (
                         <LoadingPage />
                     ) : (
-                        <Grid container columns={7}>
+                        <Grid container columns={7} sx={{ minHeight: '158px' }}>
                             {days.map((_, i) => (
                                 <Grid key={i} size={1}>
                                     <WeeklyTrainingPlanDay
@@ -230,7 +225,7 @@ function WeeklyTrainingPlanDay({
                             onOpenTask={onOpenTask}
                             startDate={dayStart}
                             endDate={dayEnd}
-                            activeOnly={activeOnly}
+                            activeOnly={false} // Extra tasks are always active
                         />
                     ))}
                 </Stack>
@@ -255,7 +250,7 @@ function WeeklyTrainingPlanItem({
     const { task } = suggestion;
     const { isCurrentUser, user, timeline } = use(TrainingPlanContext);
     const tasks = useMemo(() => [suggestion], [suggestion]);
-    const [goalMinutes, timeWorked] = useTrainingPlanProgress({
+    const [goalMinutes, timeWorked, _, __, active] = useTrainingPlanProgress({
         startDate,
         endDate,
         tasks,
@@ -264,7 +259,7 @@ function WeeklyTrainingPlanItem({
 
     const isComplete = timeWorked >= goalMinutes;
 
-    if (activeOnly && timeWorked <= 0) {
+    if (activeOnly && !active) {
         return null;
     }
 
